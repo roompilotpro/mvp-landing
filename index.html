@@ -20,6 +20,34 @@
         overflow-x: hidden;
       }
 
+      /* Top Banner */
+      .top-banner {
+        background: linear-gradient(90deg, #ff6b6b 0%, #ff8e53 100%);
+        color: white;
+        padding: 10px 0;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 600;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1001;
+      }
+
+      .top-banner span {
+        animation: flash 2s infinite;
+      }
+
+      @keyframes flash {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+
       .container {
         max-width: 1200px;
         margin: 0 auto;
@@ -33,7 +61,7 @@
         padding: 20px 0;
         position: fixed;
         width: 100%;
-        top: 0;
+        top: 40px;
         z-index: 1000;
         border-bottom: 1px solid rgba(0, 0, 0, 0.05);
       }
@@ -91,6 +119,8 @@
         font-weight: 600;
         transition: transform 0.2s, box-shadow 0.2s;
         display: inline-block;
+        border: none;
+        cursor: pointer;
       }
 
       .btn-gradient:hover {
@@ -100,7 +130,7 @@
 
       /* Hero Section */
       .hero {
-        padding: 140px 0 80px;
+        padding: 180px 0 80px;
         background: linear-gradient(180deg, #f8f9ff 0%, #ffffff 100%);
         position: relative;
       }
@@ -485,10 +515,51 @@
         background: #f8f9ff;
       }
 
+      .early-access-banner {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 40px;
+        text-align: center;
+        animation: pulse-banner 2s infinite;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      @keyframes pulse-banner {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.02);
+        }
+      }
+
+      .early-access-banner h3 {
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+
+      .early-access-banner p {
+        font-size: 16px;
+        opacity: 0.95;
+      }
+
+      .spots-remaining {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 8px 16px;
+        border-radius: 20px;
+        margin-top: 10px;
+        font-weight: 600;
+      }
+
       .pricing-options {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 40px;
+        display: flex;
+        justify-content: center;
         max-width: 800px;
         margin: 0 auto;
       }
@@ -500,6 +571,8 @@
         text-align: center;
         position: relative;
         transition: transform 0.3s, box-shadow 0.3s;
+        max-width: 400px;
+        width: 100%;
       }
 
       .pricing-card:hover {
@@ -507,21 +580,34 @@
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
       }
 
-      .popular {
-        border: 2px solid #667eea;
-      }
-
-      .popular-badge {
+      .launch-badge {
         position: absolute;
         top: -15px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        right: 20px;
+        background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
         color: white;
-        padding: 6px 20px;
+        padding: 6px 16px;
         border-radius: 20px;
-        font-size: 13px;
+        font-size: 12px;
         font-weight: 600;
+        animation: bounce 2s infinite;
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+      }
+
+      .original-price {
+        text-decoration: line-through;
+        color: #999;
+        font-size: 24px;
+        margin-bottom: -10px;
       }
 
       .pricing-card h3 {
@@ -606,6 +692,21 @@
         border-color: #667eea;
       }
 
+      .warning-box {
+        max-width: 600px;
+        margin: 20px auto 30px;
+        padding: 20px;
+        background: #fff3cd;
+        border: 2px solid #ffc107;
+        border-radius: 10px;
+      }
+
+      .warning-box p {
+        margin: 0;
+        color: #856404;
+        font-weight: 600;
+      }
+
       /* Footer */
       footer {
         padding: 60px 0 40px;
@@ -684,6 +785,14 @@
     </style>
   </head>
   <body>
+    <!-- Top Banner -->
+    <div class="top-banner">
+      <span
+        >🔥 LIMITED TIME: 50% off for first 100 hosts • Only 37 spots remaining
+        • Prices double after early access</span
+      >
+    </div>
+
     <!-- Header -->
     <header>
       <div class="container">
@@ -692,7 +801,7 @@
           <div class="nav-menu">
             <a href="#features">Features</a>
             <a href="#pricing">Pricing</a>
-            <a href="#cta" class="btn-gradient">Start Free</a>
+            <a href="#cta" class="btn-gradient">Claim 50% Off</a>
           </div>
         </nav>
       </div>
@@ -718,8 +827,22 @@
               sleep.
             </p>
 
+            <div
+              style="
+                background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+                font-weight: 600;
+                display: inline-block;
+              "
+            >
+              🔥 Early Access: Get 50% Off Forever - Only 37 Spots Left
+            </div>
+
             <div class="hero-buttons">
-              <a href="#cta" class="btn-gradient">Launch Your Business</a>
+              <a href="#cta" class="btn-gradient">Claim Early Access</a>
               <a href="#automation" class="btn-outline">See It In Action</a>
             </div>
 
@@ -727,7 +850,9 @@
               <div>
                 <strong style="font-size: 24px; color: #667eea">2%</strong
                 ><br />
-                <span style="color: #999">Platform Fee</span>
+                <span style="color: #999"
+                  ><s style="color: #ccc">4%</s> Intro Rate</span
+                >
               </div>
               <div>
                 <strong style="font-size: 24px; color: #667eea">24hr</strong
@@ -882,48 +1007,73 @@
     <section class="pricing" id="pricing">
       <div class="container">
         <div class="section-header">
-          <h2>Simple, Transparent Pricing</h2>
-          <p>Choose the plan that works for your business</p>
+          <h2>🔥 Limited-Time Early Access Pricing</h2>
+          <p>
+            Lock in this rate forever - price increases after first 100 hosts
+          </p>
+        </div>
+
+        <div class="early-access-banner">
+          <h3>⚡ EARLY ACCESS SPECIAL: 50% Off Regular Pricing</h3>
+          <p>
+            Join now and keep this rate for life. Never pay the increased price.
+          </p>
+          <div class="spots-remaining">
+            ⏰ Only 37 spots remaining at this price
+          </div>
         </div>
 
         <div class="pricing-options">
           <div class="pricing-card">
+            <span class="launch-badge">50% OFF</span>
             <h3>Transaction Based</h3>
+            <div class="original-price">4%</div>
             <div class="price">2%</div>
-            <p class="price-description">Of rent collected</p>
+            <p class="price-description">
+              Of rent collected<br /><strong style="color: #ff6b6b"
+                >Early Access Rate</strong
+              >
+            </p>
             <ul class="pricing-features">
+              <li>🔒 Locked in forever</li>
               <li>Pay only when you earn</li>
-              <li>No upfront costs</li>
               <li>All features included</li>
               <li>Unlimited properties</li>
-              <li>24/7 automation</li>
+              <li>Founder's priority support</li>
             </ul>
-            <a href="#cta" class="btn-gradient">Start Earning</a>
-          </div>
-
-          <div class="pricing-card popular">
-            <span class="popular-badge">Most Popular</span>
-            <h3>Flat Monthly</h3>
-            <div class="price">$15</div>
-            <p class="price-description">Per room per month</p>
-            <ul class="pricing-features">
-              <li>Predictable costs</li>
-              <li>Save on high-rent rooms</li>
-              <li>All features included</li>
-              <li>Priority support</li>
-              <li>Advanced analytics</li>
-            </ul>
-            <a href="#cta" class="btn-gradient">Get Started</a>
+            <a href="#cta" class="btn-gradient">Claim Early Access</a>
           </div>
         </div>
+
+        <p
+          style="
+            text-align: center;
+            margin-top: 40px;
+            color: #999;
+            font-size: 14px;
+          "
+        >
+          * Early access pricing available for a limited time only. Regular
+          pricing (4% transaction fee) begins after first 100 hosts or January
+          31, 2025, whichever comes first. Early adopters keep their
+          introductory rate permanently with no future increases.
+        </p>
       </div>
     </section>
 
     <!-- Final CTA -->
     <section class="final-cta" id="cta">
       <div class="container">
-        <h2>Ready to Automate Your Success?</h2>
-        <p>Join hundreds of hosts who've already made the switch</p>
+        <h2>⏰ Secure Your 50% Lifetime Discount</h2>
+        <p>Once these 37 spots are gone, prices double. Don't miss out.</p>
+
+        <div class="warning-box">
+          <p>
+            ⚠️ <strong>Fair Warning:</strong> After early access closes, new
+            users will pay 4% transaction fees. Lock in your founder's rate now
+            and never pay more.
+          </p>
+        </div>
 
         <form
           action="https://formspree.io/f/mldadzqy"
@@ -937,8 +1087,14 @@
             placeholder="Enter your email"
             required
           />
-          <button type="submit" class="btn-gradient">Get Early Access</button>
+          <button type="submit" class="btn-gradient">
+            Get Early Access + 50% Off
+          </button>
         </form>
+
+        <p style="color: #999; font-size: 14px; margin-top: 20px">
+          No credit card required • Instant access • Rate locked forever
+        </p>
       </div>
     </section>
 
@@ -953,30 +1109,6 @@
               more profit, maintain full control.
             </p>
           </div>
-
-          <!-- <div class="footer-column">
-            <h4>Product</h4>
-            <a href="#features">Features</a>
-            <a href="#automation">Automation</a>
-            <a href="#pricing">Pricing</a>
-            <a href="#automation">Integrations</a>
-          </div>
-
-          <div class="footer-column">
-            <h4>Company</h4>
-            <a href="#about">About</a>
-            <a href="#about">Blog</a>
-            <a href="#about">Careers</a>
-            <a href="#about">Press</a>
-          </div>
-
-          <div class="footer-column">
-            <h4>Support</h4>
-            <a href="#about">Help Center</a>
-            <a href="#cta">Contact</a>
-            <a href="#about">Status</a>
-            <a href="#automation">API</a>
-          </div> -->
         </div>
 
         <div class="footer-bottom">
