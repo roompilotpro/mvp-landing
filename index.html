@@ -1025,8 +1025,10 @@
     <!-- Top Banner -->
     <div class="top-banner">
       <span
-        >🔥 TIERED PRICING: Ultra Founder SOLD OUT • Only 12 spots at 2% rate •
-        Next tier 2.5% • Regular 4%</span
+        >🔥 TIERED PRICING: Ultra Founder SOLD OUT • Only
+        <span data-spots-count="current">12</span> spots at
+        <span data-tier-rate="current">2%</span> rate • Next tier
+        <span data-tier-rate="next">2.5%</span> • Regular 4%</span
       >
     </div>
 
@@ -1075,7 +1077,10 @@
                 display: inline-block;
               "
             >
-              🔥 Founder Rate: Only 12 Spots at 2% - Next Tier 2.5%
+              🔥 Founder Rate: Only
+              <span data-spots-count="current">12</span> Spots at
+              <span data-tier-rate="current">2%</span> - Next Tier
+              <span data-tier-rate="next">2.5%</span>
             </div>
 
             <div class="hero-buttons">
@@ -1258,16 +1263,22 @@
           </p>
           <div class="tier-progress">
             <div class="tier-progress-bar">
-              <div class="tier-segment filled">1.5% SOLD OUT</div>
-              <div class="tier-segment active">2% ACTIVE</div>
-              <div class="tier-segment upcoming">2.5% NEXT</div>
+              <div class="tier-segment filled" data-tier-segment="tier1">
+                1.5% SOLD OUT
+              </div>
+              <div class="tier-segment active" data-tier-segment="tier2">
+                <span data-tier-rate="current">2%</span> ACTIVE
+              </div>
+              <div class="tier-segment upcoming" data-tier-segment="tier3">
+                <span data-tier-rate="next">2.5%</span> NEXT
+              </div>
             </div>
           </div>
         </div>
 
         <div class="pricing-tiers">
           <!-- Tier 1: SOLD OUT -->
-          <div class="pricing-card sold-out">
+          <div class="pricing-card sold-out" data-tier-card="tier1">
             <div class="tier-badge sold-out-badge">SOLD OUT</div>
             <div class="tier-label">Ultra Founder Rate</div>
             <div class="original-price">4%</div>
@@ -1290,7 +1301,7 @@
           </div>
 
           <!-- Tier 2: CURRENTLY AVAILABLE (Highlighted) -->
-          <div class="pricing-card featured">
+          <div class="pricing-card featured" data-tier-card="tier2">
             <div class="tier-badge current-badge">AVAILABLE NOW</div>
             <div class="tier-label">Founder Rate</div>
             <div class="original-price">4%</div>
@@ -1300,7 +1311,8 @@
               <span class="tier-status">Next 25 hosts</span>
             </p>
             <div class="spots-counter">
-              <span class="spots-number">12</span> spots remaining
+              <span class="spots-number" data-spots-count="current">12</span>
+              spots remaining
             </div>
             <ul class="pricing-features">
               <li>🔒 Locked in forever</li>
@@ -1313,7 +1325,7 @@
           </div>
 
           <!-- Tier 3: COMING NEXT -->
-          <div class="pricing-card coming-soon">
+          <div class="pricing-card coming-soon" data-tier-card="tier3">
             <div class="tier-badge next-badge">COMING NEXT</div>
             <div class="tier-label">Early Access Rate</div>
             <div class="original-price">4%</div>
@@ -1367,15 +1379,18 @@
       <div class="container">
         <h2>⏰ Secure Your Founder Rate Now</h2>
         <p>
-          Only 12 spots left at 2%. Next tier jumps to 2.5%, then 4% regular
-          rate.
+          Only <span data-spots-count="current">12</span> spots left at
+          <span data-tier-rate="current">2%</span>. Next tier jumps to
+          <span data-tier-rate="next">2.5%</span>, then 4% regular rate.
         </p>
 
         <div class="warning-box">
           <p>
             ⚠️ <strong>Fair Warning:</strong> Ultra Founder tier (1.5%) is
-            already SOLD OUT. Don't miss the current 2% rate - only 12 spots
-            remaining before it increases.
+            already SOLD OUT. Don't miss the current
+            <span data-tier-rate="current">2%</span> rate - only
+            <span data-spots-count="current">12</span> spots remaining before it
+            increases.
           </p>
         </div>
 
@@ -1420,5 +1435,509 @@
         </div>
       </div>
     </footer>
+
+    <!-- Dynamic Spots Counter Script -->
+    <script>
+      // Tier Configuration and Management System
+      class TierCounterManager {
+        constructor() {
+          // Default tier configuration
+          this.defaultConfig = {
+            tiers: [
+              {
+                id: "tier1",
+                name: "Ultra Founder",
+                rate: "1.5%",
+                totalSpots: 25,
+                currentSpots: 0,
+                status: "sold-out",
+              },
+              {
+                id: "tier2",
+                name: "Founder",
+                rate: "2%",
+                totalSpots: 25,
+                currentSpots: 12,
+                status: "active",
+              },
+              {
+                id: "tier3",
+                name: "Early Access",
+                rate: "2.5%",
+                totalSpots: 50,
+                currentSpots: 50,
+                status: "upcoming",
+              },
+            ],
+            lastUpdated: new Date().toISOString(),
+          };
+
+          this.config = null;
+          this.storageKey = "roompilot_tier_config";
+        }
+
+        // Initialize the counter manager
+        init() {
+          this.loadState();
+          this.updateAllDisplays();
+          this.attachFormHandler();
+          this.addSuccessModal();
+        }
+
+        // Load state from localStorage or use defaults
+        loadState() {
+          try {
+            const stored = localStorage.getItem(this.storageKey);
+            if (stored) {
+              this.config = JSON.parse(stored);
+            } else {
+              this.config = this.defaultConfig;
+              this.saveState();
+            }
+          } catch (e) {
+            console.log("localStorage not available, using defaults");
+            this.config = this.defaultConfig;
+          }
+        }
+
+        // Save current state to localStorage
+        saveState() {
+          try {
+            this.config.lastUpdated = new Date().toISOString();
+            localStorage.setItem(this.storageKey, JSON.stringify(this.config));
+          } catch (e) {
+            console.log("Could not save to localStorage");
+          }
+        }
+
+        // Get the currently active tier
+        getActiveTier() {
+          return this.config.tiers.find((tier) => tier.status === "active");
+        }
+
+        // Get the next upcoming tier
+        getNextTier() {
+          return this.config.tiers.find((tier) => tier.status === "upcoming");
+        }
+
+        // Decrement spots for the active tier
+        decrementSpots() {
+          const activeTier = this.getActiveTier();
+          if (!activeTier || activeTier.currentSpots <= 0) {
+            return false;
+          }
+
+          // Decrease spots
+          activeTier.currentSpots--;
+
+          // Check if tier should transition
+          if (activeTier.currentSpots === 0) {
+            this.transitionToNextTier();
+          }
+
+          // Save state and update displays
+          this.saveState();
+          this.updateAllDisplays();
+
+          return true;
+        }
+
+        // Transition current tier to sold-out and activate next tier
+        transitionToNextTier() {
+          const currentTier = this.getActiveTier();
+          const nextTier = this.getNextTier();
+
+          if (currentTier) {
+            currentTier.status = "sold-out";
+          }
+
+          if (nextTier) {
+            nextTier.status = "active";
+          }
+        }
+
+        // Update all display elements on the page
+        updateAllDisplays() {
+          this.updateSpotCounts();
+          this.updateTierRates();
+          this.updateTierCards();
+          this.updateProgressBar();
+        }
+
+        // Update spot count displays
+        updateSpotCounts() {
+          const activeTier = this.getActiveTier();
+          const spots = activeTier ? activeTier.currentSpots : 0;
+
+          // Update all elements with data-spots-count="current"
+          document
+            .querySelectorAll('[data-spots-count="current"]')
+            .forEach((el) => {
+              this.animateCountChange(el, parseInt(el.textContent), spots);
+            });
+        }
+
+        // Update tier rate displays
+        updateTierRates() {
+          const activeTier = this.getActiveTier();
+          const nextTier = this.getNextTier();
+
+          // Update current tier rate
+          if (activeTier) {
+            document
+              .querySelectorAll('[data-tier-rate="current"]')
+              .forEach((el) => {
+                el.textContent = activeTier.rate;
+              });
+          }
+
+          // Update next tier rate
+          if (nextTier) {
+            document
+              .querySelectorAll('[data-tier-rate="next"]')
+              .forEach((el) => {
+                el.textContent = nextTier.rate;
+              });
+          }
+        }
+
+        // Update pricing card classes and states
+        updateTierCards() {
+          this.config.tiers.forEach((tier) => {
+            const card = document.querySelector(
+              `[data-tier-card="${tier.id}"]`
+            );
+            if (!card) return;
+
+            // Remove all state classes
+            card.classList.remove("featured", "sold-out", "coming-soon");
+
+            // Add appropriate class based on status
+            if (tier.status === "active") {
+              card.classList.add("featured");
+
+              // Update badge
+              const badge = card.querySelector(".tier-badge");
+              if (badge) {
+                badge.textContent = "AVAILABLE NOW";
+                badge.className = "tier-badge current-badge";
+              }
+
+              // Update or add spots counter
+              let spotsCounter = card.querySelector(".spots-counter");
+              if (!spotsCounter && tier.id !== "tier1") {
+                // Create spots counter if it doesn't exist
+                const priceDesc = card.querySelector(".price-description");
+                if (priceDesc) {
+                  spotsCounter = document.createElement("div");
+                  spotsCounter.className = "spots-counter";
+                  spotsCounter.innerHTML = `<span class="spots-number" data-spots-count="current">${tier.currentSpots}</span> spots remaining`;
+                  priceDesc.parentNode.insertBefore(
+                    spotsCounter,
+                    priceDesc.nextSibling
+                  );
+                }
+              } else if (spotsCounter) {
+                spotsCounter.querySelector(".spots-number").textContent =
+                  tier.currentSpots;
+              }
+
+              // Update button
+              const button = card.querySelector("a, button");
+              if (button) {
+                if (button.tagName === "BUTTON") {
+                  // Replace button with link
+                  const newButton = document.createElement("a");
+                  newButton.href = "#cta";
+                  newButton.className = "btn-gradient";
+                  newButton.textContent = `Claim ${tier.name} Rate`;
+                  button.parentNode.replaceChild(newButton, button);
+                } else {
+                  button.textContent = `Claim ${tier.name} Rate`;
+                  button.classList.remove("disabled");
+                  button.removeAttribute("disabled");
+                }
+              }
+
+              // Remove sold-out overlay if exists
+              const overlay = card.querySelector(".sold-out-overlay");
+              if (overlay) overlay.remove();
+            } else if (tier.status === "sold-out") {
+              card.classList.add("sold-out");
+
+              // Update badge
+              const badge = card.querySelector(".tier-badge");
+              if (badge) {
+                badge.textContent = "SOLD OUT";
+                badge.className = "tier-badge sold-out-badge";
+              }
+
+              // Add sold-out overlay if it doesn't exist
+              if (!card.querySelector(".sold-out-overlay")) {
+                const overlay = document.createElement("div");
+                overlay.className = "sold-out-overlay";
+                overlay.innerHTML = "<span>✓ All spots claimed</span>";
+                card.appendChild(overlay);
+              }
+
+              // Remove spots counter
+              const spotsCounter = card.querySelector(".spots-counter");
+              if (spotsCounter) spotsCounter.remove();
+            } else if (tier.status === "upcoming") {
+              card.classList.add("coming-soon");
+
+              // Update badge
+              const badge = card.querySelector(".tier-badge");
+              if (badge) {
+                badge.textContent = "COMING NEXT";
+                badge.className = "tier-badge next-badge";
+              }
+
+              // Update button
+              const button = card.querySelector("a, button");
+              if (button) {
+                if (button.tagName === "A") {
+                  // Replace link with button
+                  const newButton = document.createElement("button");
+                  newButton.className = "btn-outline disabled";
+                  newButton.textContent = "Available Soon";
+                  newButton.disabled = true;
+                  button.parentNode.replaceChild(newButton, button);
+                }
+              }
+
+              // Remove spots counter
+              const spotsCounter = card.querySelector(".spots-counter");
+              if (spotsCounter) spotsCounter.remove();
+            }
+          });
+        }
+
+        // Update progress bar segments
+        updateProgressBar() {
+          this.config.tiers.forEach((tier) => {
+            const segment = document.querySelector(
+              `[data-tier-segment="${tier.id}"]`
+            );
+            if (!segment) return;
+
+            // Remove all state classes
+            segment.classList.remove("filled", "active", "upcoming");
+
+            // Add appropriate class
+            if (tier.status === "sold-out") {
+              segment.classList.add("filled");
+              segment.innerHTML = `${tier.rate} SOLD OUT`;
+            } else if (tier.status === "active") {
+              segment.classList.add("active");
+              segment.innerHTML = `<span data-tier-rate="current">${tier.rate}</span> ACTIVE`;
+            } else if (tier.status === "upcoming") {
+              segment.classList.add("upcoming");
+              segment.innerHTML = `<span data-tier-rate="next">${tier.rate}</span> NEXT`;
+            }
+          });
+        }
+
+        // Animate count changes
+        animateCountChange(element, oldValue, newValue) {
+          if (oldValue === newValue) {
+            element.textContent = newValue;
+            return;
+          }
+
+          // Quick animation from old to new value
+          const duration = 500; // milliseconds
+          const steps = 10;
+          const stepDuration = duration / steps;
+          const diff = newValue - oldValue;
+          const increment = diff / steps;
+
+          let currentStep = 0;
+          const interval = setInterval(() => {
+            currentStep++;
+            if (currentStep >= steps) {
+              element.textContent = newValue;
+              clearInterval(interval);
+              this.pulseElement(element);
+            } else {
+              element.textContent = Math.round(
+                oldValue + increment * currentStep
+              );
+            }
+          }, stepDuration);
+        }
+
+        // Pulse animation for emphasis
+        pulseElement(element) {
+          element.style.transition = "transform 0.3s";
+          element.style.transform = "scale(1.2)";
+          setTimeout(() => {
+            element.style.transform = "scale(1)";
+          }, 300);
+        }
+
+        // Add success modal HTML to page
+        addSuccessModal() {
+          const modalHTML = `
+            <div id="signup-success-modal" style="
+              display: none;
+              position: fixed;
+              top: 0;
+              left: 0;
+              right: 0;
+              bottom: 0;
+              background: rgba(0,0,0,0.8);
+              z-index: 10000;
+              justify-content: center;
+              align-items: center;
+            ">
+              <div style="
+                background: white;
+                border-radius: 20px;
+                padding: 40px;
+                max-width: 500px;
+                text-align: center;
+                position: relative;
+                animation: modalSlideIn 0.3s ease-out;
+              ">
+                <div style="
+                  font-size: 48px;
+                  margin-bottom: 20px;
+                ">🎉</div>
+                <h2 style="
+                  font-size: 28px;
+                  margin-bottom: 15px;
+                  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                  -webkit-background-clip: text;
+                  -webkit-text-fill-color: transparent;
+                  background-clip: text;
+                ">Congratulations!</h2>
+                <p id="success-message" style="
+                  font-size: 18px;
+                  color: #4a4a4a;
+                  margin-bottom: 25px;
+                ">You've secured your spot!</p>
+                <button onclick="tierManager.closeSuccessModal()" style="
+                  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                  color: white;
+                  padding: 12px 30px;
+                  border: none;
+                  border-radius: 30px;
+                  font-size: 16px;
+                  font-weight: 600;
+                  cursor: pointer;
+                ">Continue</button>
+              </div>
+            </div>
+            <style>
+              @keyframes modalSlideIn {
+                from {
+                  transform: translateY(-50px);
+                  opacity: 0;
+                }
+                to {
+                  transform: translateY(0);
+                  opacity: 1;
+                }
+              }
+            </style>
+          `;
+          document.body.insertAdjacentHTML("beforeend", modalHTML);
+        }
+
+        // Show success modal with message
+        showSuccessModal(spotNumber, tierRate) {
+          const modal = document.getElementById("signup-success-modal");
+          const message = document.getElementById("success-message");
+
+          if (spotNumber > 0) {
+            message.innerHTML = `You've secured <strong>spot #${
+              26 - spotNumber
+            }</strong> at the exclusive <strong>${tierRate}</strong> rate!<br><small style="color: #999; display: block; margin-top: 10px;">Only ${
+              spotNumber - 1
+            } spots remaining at this rate</small>`;
+          } else {
+            message.innerHTML = `You got the <strong>LAST SPOT</strong> at the ${tierRate} rate!<br><small style="color: #ff6b6b; display: block; margin-top: 10px;">This tier is now SOLD OUT!</small>`;
+          }
+
+          modal.style.display = "flex";
+        }
+
+        // Close success modal
+        closeSuccessModal() {
+          const modal = document.getElementById("signup-success-modal");
+          modal.style.display = "none";
+        }
+
+        // Attach form submission handler
+        attachFormHandler() {
+          const form = document.querySelector('form[action*="formspree"]');
+          if (!form) return;
+
+          form.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const activeTier = this.getActiveTier();
+            if (!activeTier) {
+              // If no active tier, just submit normally
+              form.submit();
+              return;
+            }
+
+            // Get form data
+            const formData = new FormData(form);
+            const email = formData.get("email");
+
+            // Show success modal first
+            this.showSuccessModal(activeTier.currentSpots, activeTier.rate);
+
+            // Decrement counter after a short delay
+            setTimeout(() => {
+              this.decrementSpots();
+
+              // Submit to Formspree
+              fetch(form.action, {
+                method: "POST",
+                body: formData,
+                headers: {
+                  Accept: "application/json",
+                },
+              })
+                .then((response) => {
+                  if (response.ok) {
+                    // Clear form
+                    form.reset();
+                    console.log("Form submitted successfully");
+                  } else {
+                    console.error("Form submission failed");
+                  }
+                })
+                .catch((error) => {
+                  console.error("Error submitting form:", error);
+                  // Still decrement counter even if submission fails
+                });
+            }, 1500);
+          });
+        }
+
+        // Reset configuration (for testing)
+        reset() {
+          localStorage.removeItem(this.storageKey);
+          this.config = this.defaultConfig;
+          this.saveState();
+          this.updateAllDisplays();
+        }
+      }
+
+      // Initialize the tier counter manager when page loads
+      let tierManager;
+      document.addEventListener("DOMContentLoaded", () => {
+        tierManager = new TierCounterManager();
+        tierManager.init();
+
+        // Expose to window for debugging
+        window.tierManager = tierManager;
+      });
+    </script>
   </body>
 </html>
