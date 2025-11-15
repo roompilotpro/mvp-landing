@@ -557,22 +557,23 @@
         font-weight: 600;
       }
 
-      .pricing-options {
-        display: flex;
-        justify-content: center;
-        max-width: 800px;
+      .pricing-tiers {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        max-width: 1200px;
         margin: 0 auto;
+        padding: 0 20px;
       }
 
       .pricing-card {
         background: white;
-        padding: 40px;
+        padding: 40px 30px;
         border-radius: 20px;
         text-align: center;
         position: relative;
         transition: transform 0.3s, box-shadow 0.3s;
-        max-width: 400px;
-        width: 100%;
+        border: 2px solid #e5e5e5;
       }
 
       .pricing-card:hover {
@@ -580,17 +581,229 @@
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
       }
 
-      .launch-badge {
+      /* Featured/Current Tier - Highlighted */
+      .pricing-card.featured {
+        transform: scale(1.05);
+        border: 3px solid #667eea;
+        box-shadow: 0 20px 60px rgba(102, 126, 234, 0.25);
+        z-index: 2;
+      }
+
+      .pricing-card.featured:hover {
+        transform: scale(1.08);
+        box-shadow: 0 25px 70px rgba(102, 126, 234, 0.35);
+      }
+
+      /* Sold Out Tier - Grayed/Disabled */
+      .pricing-card.sold-out {
+        opacity: 0.6;
+        background: #f5f5f5;
+        border-color: #d0d0d0;
+        position: relative;
+      }
+
+      .pricing-card.sold-out:hover {
+        transform: none;
+      }
+
+      .sold-out-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255, 255, 255, 0.85);
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 700;
+        color: #999;
+        pointer-events: none;
+      }
+
+      .sold-out-overlay span {
+        background: white;
+        padding: 15px 30px;
+        border-radius: 12px;
+        border: 2px solid #d0d0d0;
+      }
+
+      /* Coming Soon Tier - Subtle */
+      .pricing-card.coming-soon {
+        opacity: 0.85;
+        border-color: #e5e5e5;
+      }
+
+      .pricing-card.coming-soon:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      }
+
+      /* Tier Badges */
+      .tier-badge {
         position: absolute;
         top: -15px;
-        right: 20px;
-        background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
-        color: white;
-        padding: 6px 16px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 8px 20px;
         border-radius: 20px;
         font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .sold-out-badge {
+        background: linear-gradient(135deg, #999 0%, #666 100%);
+        color: white;
+      }
+
+      .current-badge {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+        color: white;
+        animation: pulse-glow 2s infinite;
+      }
+
+      @keyframes pulse-glow {
+        0%,
+        100% {
+          box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+        }
+        50% {
+          box-shadow: 0 0 20px rgba(255, 107, 107, 0.8);
+        }
+      }
+
+      .next-badge {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      /* Tier Labels */
+      .tier-label {
+        font-size: 20px;
         font-weight: 600;
-        animation: bounce 2s infinite;
+        margin-bottom: 10px;
+        color: #4a4a4a;
+      }
+
+      .tier-status {
+        font-size: 14px;
+        color: #999;
+        font-weight: 500;
+      }
+
+      /* Spots Counter - Enhanced */
+      .spots-counter {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 10px;
+        margin: 20px 0;
+        font-weight: 600;
+        animation: pulse-subtle 3s infinite;
+      }
+
+      @keyframes pulse-subtle {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.02);
+        }
+      }
+
+      .spots-number {
+        font-size: 28px;
+        font-weight: 800;
+        display: inline-block;
+        margin-right: 5px;
+      }
+
+      /* Regular Rate Context */
+      .regular-rate-context {
+        text-align: center;
+        margin-top: 50px;
+        padding: 25px;
+        background: #fff3cd;
+        border: 2px solid #ffc107;
+        border-radius: 12px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .regular-rate-context p {
+        margin: 0;
+        color: #856404;
+        font-size: 16px;
+      }
+
+      .regular-rate-context p strong {
+        font-size: 18px;
+        color: #ff6b6b;
+      }
+
+      /* Disabled Button */
+      .btn-outline.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        border-color: #ccc;
+        color: #999;
+      }
+
+      .btn-outline.disabled:hover {
+        background: transparent;
+        color: #999;
+      }
+
+      /* Tier Progress Bar */
+      .tier-progress {
+        margin-top: 20px;
+      }
+
+      .tier-progress-bar {
+        display: flex;
+        gap: 10px;
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .tier-segment {
+        flex: 1;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .tier-segment.filled {
+        background: rgba(255, 255, 255, 0.3);
+        opacity: 0.7;
+      }
+
+      .tier-segment.active {
+        background: rgba(255, 255, 255, 0.9);
+        color: #ff6b6b;
+        animation: pulse-tier 2s infinite;
+      }
+
+      .tier-segment.upcoming {
+        background: rgba(255, 255, 255, 0.2);
+        border: 2px dashed rgba(255, 255, 255, 0.5);
+      }
+
+      @keyframes pulse-tier {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
       }
 
       @keyframes bounce {
@@ -765,10 +978,34 @@
       }
 
       /* Responsive */
+      @media (max-width: 968px) {
+        .pricing-tiers {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+
+        .pricing-card.featured {
+          transform: scale(1);
+          order: -1; /* Move featured to top on mobile */
+        }
+
+        .pricing-card.featured:hover {
+          transform: scale(1.02);
+        }
+
+        .pricing-card.sold-out {
+          order: 1;
+        }
+
+        .pricing-card.coming-soon {
+          order: 2;
+        }
+      }
+
       @media (max-width: 768px) {
         .hero-grid,
         .automation-grid,
-        .pricing-options,
+        .pricing-tiers,
         .stats-grid {
           grid-template-columns: 1fr;
         }
@@ -788,8 +1025,8 @@
     <!-- Top Banner -->
     <div class="top-banner">
       <span
-        >🔥 LIMITED TIME: 50% off for first 100 hosts • Only 37 spots remaining
-        • Prices double after early access</span
+        >🔥 TIERED PRICING: Ultra Founder SOLD OUT • Only 12 spots at 2% rate •
+        Next tier 2.5% • Regular 4%</span
       >
     </div>
 
@@ -838,7 +1075,7 @@
                 display: inline-block;
               "
             >
-              🔥 Early Access: Get 50% Off Forever - Only 37 Spots Left
+              🔥 Founder Rate: Only 12 Spots at 2% - Next Tier 2.5%
             </div>
 
             <div class="hero-buttons">
@@ -1014,25 +1251,30 @@
         </div>
 
         <div class="early-access-banner">
-          <h3>⚡ EARLY ACCESS SPECIAL: 50% Off Regular Pricing</h3>
+          <h3>⚡ TIERED EARLY ACCESS PRICING</h3>
           <p>
-            Join now and keep this rate for life. Never pay the increased price.
+            Lock in your rate now. Each tier offers a lower rate forever – once
+            filled, prices increase to the next tier.
           </p>
-          <div class="spots-remaining">
-            ⏰ Only 37 spots remaining at this price
+          <div class="tier-progress">
+            <div class="tier-progress-bar">
+              <div class="tier-segment filled">1.5% SOLD OUT</div>
+              <div class="tier-segment active">2% ACTIVE</div>
+              <div class="tier-segment upcoming">2.5% NEXT</div>
+            </div>
           </div>
         </div>
 
-        <div class="pricing-options">
-          <div class="pricing-card">
-            <span class="launch-badge">50% OFF</span>
-            <h3>Transaction Based</h3>
+        <div class="pricing-tiers">
+          <!-- Tier 1: SOLD OUT -->
+          <div class="pricing-card sold-out">
+            <div class="tier-badge sold-out-badge">SOLD OUT</div>
+            <div class="tier-label">Ultra Founder Rate</div>
             <div class="original-price">4%</div>
-            <div class="price">2%</div>
+            <div class="price">1.5%</div>
             <p class="price-description">
-              Of rent collected<br /><strong style="color: #ff6b6b"
-                >Early Access Rate</strong
-              >
+              Of rent collected<br />
+              <span class="tier-status">First 25 hosts</span>
             </p>
             <ul class="pricing-features">
               <li>🔒 Locked in forever</li>
@@ -1040,9 +1282,68 @@
               <li>All features included</li>
               <li>Unlimited properties</li>
               <li>Founder's priority support</li>
+              <li>Early access to new features</li>
             </ul>
-            <a href="#cta" class="btn-gradient">Claim Early Access</a>
+            <div class="sold-out-overlay">
+              <span>✓ All spots claimed</span>
+            </div>
           </div>
+
+          <!-- Tier 2: CURRENTLY AVAILABLE (Highlighted) -->
+          <div class="pricing-card featured">
+            <div class="tier-badge current-badge">AVAILABLE NOW</div>
+            <div class="tier-label">Founder Rate</div>
+            <div class="original-price">4%</div>
+            <div class="price">2%</div>
+            <p class="price-description">
+              Of rent collected<br />
+              <span class="tier-status">Next 25 hosts</span>
+            </p>
+            <div class="spots-counter">
+              <span class="spots-number">12</span> spots remaining
+            </div>
+            <ul class="pricing-features">
+              <li>🔒 Locked in forever</li>
+              <li>Pay only when you earn</li>
+              <li>All features included</li>
+              <li>Unlimited properties</li>
+              <li>Founder's priority support</li>
+            </ul>
+            <a href="#cta" class="btn-gradient">Claim Founder Rate</a>
+          </div>
+
+          <!-- Tier 3: COMING NEXT -->
+          <div class="pricing-card coming-soon">
+            <div class="tier-badge next-badge">COMING NEXT</div>
+            <div class="tier-label">Early Access Rate</div>
+            <div class="original-price">4%</div>
+            <div class="price">2.5%</div>
+            <p class="price-description">
+              Of rent collected<br />
+              <span class="tier-status">Next 50 hosts</span>
+            </p>
+            <ul class="pricing-features">
+              <li>🔒 Locked in forever</li>
+              <li>Pay only when you earn</li>
+              <li>All features included</li>
+              <li>Unlimited properties</li>
+              <li>Priority support</li>
+            </ul>
+            <button class="btn-outline disabled" disabled>
+              Available Soon
+            </button>
+          </div>
+        </div>
+
+        <!-- Regular Rate Context -->
+        <div class="regular-rate-context">
+          <p>
+            <strong>⚠️ Regular rate after early access: 4%</strong> transaction
+            fee
+          </p>
+          <p style="margin-top: 8px; font-size: 14px">
+            Early adopters keep their rate forever with no increases
+          </p>
         </div>
 
         <p
@@ -1064,14 +1365,17 @@
     <!-- Final CTA -->
     <section class="final-cta" id="cta">
       <div class="container">
-        <h2>⏰ Secure Your 50% Lifetime Discount</h2>
-        <p>Once these 37 spots are gone, prices double. Don't miss out.</p>
+        <h2>⏰ Secure Your Founder Rate Now</h2>
+        <p>
+          Only 12 spots left at 2%. Next tier jumps to 2.5%, then 4% regular
+          rate.
+        </p>
 
         <div class="warning-box">
           <p>
-            ⚠️ <strong>Fair Warning:</strong> After early access closes, new
-            users will pay 4% transaction fees. Lock in your founder's rate now
-            and never pay more.
+            ⚠️ <strong>Fair Warning:</strong> Ultra Founder tier (1.5%) is
+            already SOLD OUT. Don't miss the current 2% rate - only 12 spots
+            remaining before it increases.
           </p>
         </div>
 
@@ -1088,7 +1392,7 @@
             required
           />
           <button type="submit" class="btn-gradient">
-            Get Early Access + 50% Off
+            Claim 2% Founder Rate
           </button>
         </form>
 
